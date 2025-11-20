@@ -1,0 +1,42 @@
+# Zero-trust networking: payments-api only accepts traffic from the
+# API gateway/ingress, and only egresses to the DB and message bus —
+# not the open internet. Standard DevSecOps posture for a payments service.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: payments-api-network-policy
+  namespace: mesh-payments
+spec:
+  podSelector:
+    matchLabels:
+      app: payments-api
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: api-gateway
+      ports:
+        - protocol: TCP
+          port: 8000
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - podSelector:
+            matchLabels:
+              app: notification-service
+      ports:
+        - protocol: TCP
+          port: 5671   # AMQP/Service Bus
+    - to: []            # allow DNS resolution
+      ports:
+        - protocol: UDP
+          port: 53
