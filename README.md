@@ -1,14 +1,31 @@
-This is a demo project which demonstrate how Crypto Platform performs payments to wallets. It includes 2 parts:
+# Crypto Payments Demo
 
-1) Crypto Payment Platform (Main Crypto Platform)
-   This is a demo crypto payment platform with all bells and whistles of a production grade application. Its features include:
-   - Rest API interface with wallets, transfers, on-chain settlements
-   - AuthN (JWT) and AuthZ (RBAC)
-   - Encryption at rest and rate limiting
-   - Double entry ledge, idenpotency, atomicity
-   - Crypto settlement using simulated blockchain RPC,self-custody wallet, stablecoin settlement
-   - In-memory pub/sub message queue.
+A demo project that shows how a crypto payment platform moves value between
+wallets, split into two self-contained subprojects.
 
-2) Self-custody Wallet and Multi-chain RPC Client (Wallet)
+## 1. Crypto Payments Platform
 
-More details are in indivudal projects.
+The main demo service, built from the pieces you would expect from a
+production-grade application:
+
+- REST API for wallets, transfers and on-chain settlements
+- AuthN (JWT) and AuthZ (RBAC)
+- Encryption at rest and rate limiting
+- Double-entry ledger with idempotency and atomicity
+- Crypto settlement over a simulated blockchain RPC, self-custody wallet and
+  stablecoin flow
+- In-memory pub/sub message queue
+
+## 2. Self-Custody Wallet + Multi-Chain RPC Client
+
+A focused client for the wallet side: local key generation, a JSON-RPC
+transport for reading chain state, and signed transaction broadcast.
+
+## Repository layout
+
+| Path | What it is |
+| --- | --- |
+| [`crypto-payments-platform/`](crypto-payments-platform/README.md) | Payments API, notification consumer, Terraform/K8s/CI |
+| [`self-custody-wallet-rpc/`](self-custody-wallet-rpc/README.md) | Wallet library, RPC client and CLI |
+
+Setup, endpoints and example requests live in each subproject's README.
